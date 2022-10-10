@@ -7,9 +7,13 @@ const saucesRoutes = require('./routes/sauces');
 
 const path = require('path');
 
+require('dotenv').config();
+
+const helmet = require('helmet');
+
 const app = express();
 
-mongoose.connect('mongodb+srv://Diancire:d97RQih6F4p8QIXA@cluster0.1cdoryv.mongodb.net/?retryWrites=true&w=majority',
+mongoose.connect(`mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_MDP}@cluster0.1cdoryv.mongodb.net/?retryWrites=true&w=majority`,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
@@ -27,5 +31,7 @@ app.use((req, res, next) => {
 app.use('/api/sauces', saucesRoutes);
 app.use('/api/auth', userRoutes);
 app.use('/images', express.static(path.join(__dirname, 'images')));
+
+app.use(helmet());
 
 module.exports = app;
