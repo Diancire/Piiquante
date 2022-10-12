@@ -1,6 +1,8 @@
+// // Package qui permet de créer et vérifier les tokens d'authentification
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
  
+// Middleware qui permet de vérifier que l'utilisateur est bien connecté
 module.exports = (req, res, next) => {
    try {
        const token = req.headers.authorization.split(' ')[1];

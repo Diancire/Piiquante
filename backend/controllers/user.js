@@ -1,10 +1,13 @@
+// Package de cryptage qui permet de créer un hash des mots de passe des utilisateurs 
 const bcrypt = require('bcrypt');
+// Package qui permet de créer et vérifier les tokens d'authentification
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/User');
 
 require('dotenv').config();
 
+// Middleware pour le création de nouveaux users dans la base de donnée 
 exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
@@ -19,6 +22,7 @@ exports.signup = (req, res, next) => {
         .catch(error => res.status(500).json({ error}));
 };
 
+// Middleware pour permettre aux utilisateurs existant de se connecter 
 exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email })
         .then(user => {
