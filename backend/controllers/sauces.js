@@ -1,5 +1,5 @@
 const Sauces = require('../models/sauces');
-// Package "fs" de Node qui donne accès aux fonctions qui permet de modifier/supprimer le système de fichiers
+// Package "fs" de Node qui donne accès aux fonctions qui permet de d'intéragir avec le système de fichiers
 const fs = require('fs');
 
 // Route pour accéder à toutes les sauces

@@ -5,11 +5,14 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/User');
 
+const passwordSchema = require('../models/passwordSchema');
+
 require('dotenv').config();
 
 // Middleware pour le création de nouveaux users dans la base de donnée 
 exports.signup = (req, res, next) => {
-    bcrypt.hash(req.body.password, 10)
+    if (passwordSchema.validate(req.body.password)){ 
+        bcrypt.hash(req.body.password, 10)
         .then(hash => {
             const user = new User({
                 email: req.body.email,
@@ -20,6 +23,10 @@ exports.signup = (req, res, next) => {
                 .catch(error => res.status(400).json({ error}));
         })
         .catch(error => res.status(500).json({ error}));
+    }
+    else {
+        return res.status(400).json({ error : `Le mot passe est faible, veuillez le renforcer ! ${passwordSchema.validate('req.body.password', { list: true })}`})
+    }
 };
 
 // Middleware pour permettre aux utilisateurs existant de se connecter 
