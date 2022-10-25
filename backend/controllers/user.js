@@ -7,11 +7,13 @@ const User = require('../models/User');
 
 const passwordSchema = require('../models/passwordSchema');
 
+var validator = require('validator');
+
 require('dotenv').config();
 
 // Middleware pour le création de nouveaux users dans la base de donnée 
 exports.signup = (req, res, next) => {
-    if (passwordSchema.validate(req.body.password)){ 
+    if (passwordSchema.validate(req.body.password) && validator.isEmail(req.body.email)){ 
         bcrypt.hash(req.body.password, 10)
         .then(hash => {
             const user = new User({
@@ -25,7 +27,7 @@ exports.signup = (req, res, next) => {
         .catch(error => res.status(500).json({ error}));
     }
     else {
-        return res.status(400).json({ error : `Le mot passe est faible, veuillez le renforcer ! ${passwordSchema.validate('req.body.password', { list: true })}`})
+        return res.status(400).json({ error : `L'email n'est pas conforme ou le mot passe est faible, veuillez le renforcer ! ${passwordSchema.validate('req.body.password', { list: true })}`})
     }
 };
 
@@ -34,12 +36,12 @@ exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email })
         .then(user => {
             if (!user) {
-                return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+                return res.status(401).json({ error: 'Paire login/mot de passe incorrecte' });
             }
             bcrypt.compare(req.body.password, user.password)
                 .then(valid => {
                     if (!valid) {
-                        return res.status(401).json({ error: 'Mot de passe incorrect !' });
+                        return res.status(401).json({ error: 'Paire login/mot de passe incorrecte' });
                     }
                     res.status(200).json({
                         userId: user._id,

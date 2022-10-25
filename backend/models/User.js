@@ -1,6 +1,7 @@
 // Package qui permet d'intéragir avec la base de données MongoDB 
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
+var mongodbErrorHandler = require('mongoose-mongodb-errors');
 
 // Création du schéma de donnée qui contient les champs requis pour la connexion d'un utilisateur 
 const userSchema = mongoose.Schema({
@@ -9,5 +10,7 @@ const userSchema = mongoose.Schema({
 });
 // Utilisation du schéma via le plugin de mongoose-unique-validator
 userSchema.plugin(uniqueValidator);
+
+userSchema.plugin(mongodbErrorHandler);
 
 module.exports = mongoose.model('User', userSchema);

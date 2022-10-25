@@ -19,7 +19,7 @@ const helmet = require('helmet');
 const app = express();
 
 // Connection à MongoDB
-mongoose.connect(`mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_MDP}@cluster0.1cdoryv.mongodb.net/?retryWrites=true&w=majority`,
+mongoose.connect(`${process.env.MONGO_DB_USER}`,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
