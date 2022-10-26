@@ -1,5 +1,6 @@
 // Package qui permet d'intéragir avec la base de données MongoDB 
 const mongoose = require('mongoose');
+var mongodbErrorHandler = require('mongoose-mongodb-errors');
 
 // Création du schéma de données qui contient les champs requis pour créer une sauce
 const saucesSchema = mongoose.Schema({
@@ -15,5 +16,7 @@ const saucesSchema = mongoose.Schema({
     usersLiked: {type: [String]},
     usersDisliked: {type: [String]},
 });
+
+saucesSchema.plugin(mongodbErrorHandler);
 
 module.exports = mongoose.model('sauces', saucesSchema);
